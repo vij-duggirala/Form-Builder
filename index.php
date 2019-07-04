@@ -1,7 +1,12 @@
 <?php
 	require_once("connect.php");
 	session_start();
-	$uname=$_SESSION['username'];
+	if(isset($_SESSION['username']))
+		$uname=$_SESSION['username'];
+	else
+		header('Location:login.php');	
+	
+		
 ?>
 
 

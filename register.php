@@ -5,6 +5,25 @@
 	$uname=mysqli_real_escape_string($connection , $_POST['uname']);
 	$password=md5($_POST['password']);
 	$email=mysqli_real_escape_string($connection , $_POST['email']);
+
+	if(!$uname || !$fullname || !$password || !$email)
+		$error="none of the fields can be empty";
+	else
+	{
+		if(strpos($uname, " ")!==false)
+			$error="Username cannot contain spaces";
+		else if(strpos($uname , '_')!==false)
+			$error="Username cannot contain underscore";
+		else
+		{
+			$query0="select * from users where username=\"$uname\"";
+			$res0=mysqli_query($connection , $query0);
+			$count=mysqli_num_rows($res0);
+			if($count!=0)
+				$error="Username already exists";
+			else
+			{
+		
 	
 	$query="INSERT INTO users (fullname, username, password, email) VALUES ('$fullname' , '$uname' , '$password' , '$email')";
 	$res=mysqli_query($connection , $query);
@@ -14,6 +33,9 @@
 		echo ("error:" . mysqli_error($connection));
 	else
 		header('Location: login.php');
+		}
+		}
+	}
 		
 }
 
@@ -94,6 +116,11 @@
 			<div align="center">eMail: <input type="text" name="email"></div>
 			<div align="center"><input id="submit" type="submit" value="Register"></div>
 		</form>
+		<?php
+			if(isset($error)){
+				echo "<br><div align='center'>".$error.", please try again</div>";
+			}
+		?>
 		<br><br>
 		<div align="center"><h4>If you already have an account, please
 		<a class="btn" href="login.php">Login here</a></h4></div>

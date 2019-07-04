@@ -9,16 +9,20 @@
 			$form_id=$_GET['form_id'];
 			$arr=explode('_' , $form_id);
 			$admin=$arr[0];
-			//if($admin!=$uname)
-			//	echo "Permission denied";
-			//else
-			//{	
+			if($admin!=$uname)
+				echo "Permission denied";
+			else
+			{	
 				$ok=1;	
 				$qtable=$form_id."_Q";
 				$atable=$form_id."_A";
-		//	}
+			}
 		}
+		else
+			header('Location:index.php');
 	}
+	else
+		header('Location:login.php');
 ?>
 
 

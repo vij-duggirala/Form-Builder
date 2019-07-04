@@ -1,51 +1,59 @@
 <?php 
 	require_once("connect.php");
 	session_start();
-	if(isset($_GET['form_id']))
-	{	$count_q=0;
-		if(isset($_SESSION['username']))
-		{	$form_id=$_GET['form_id'];
-			$arr=explode('_' , $form_id);
-			$admin=$arr[0];
-			$uname=$_SESSION['username'];
-			$qtable=$form_id."_Q";
-			$atable=$form_id."_A";
-			$query0="select * from $uname where form_id=\"$form_id\"";
-			$res0=mysqli_query($connection , $query0);
-			$count0=mysqli_num_rows($res0);
-			if(!$res0)
-				echo mysqli_error($connection);
-			if($count0!=0)
-				echo "Not authorized";
-			else
-			{	 
-				
-				$submit=0; 
-				if(isset($_POST['submit']))
-				{
-						$submit=1;
-						$i=1;
-						 $query2="insert into $atable (user) values ('$uname')";
-						$res2=mysqli_query($connection, $query2);
-						if(!$res2)
-							echo mysqli_error($connection);
-						$query11="select * from $qtable";
-						$result11=mysqli_query($connection , $query11);
-						$count_q=mysqli_num_rows($result11);
-						while($i<=$count_q)
-						{	 $q="Q_".$i;
-							$ans=$_POST[$q];
-							$query="update $atable set $q ='$ans' where user=\"$uname\"";
-							$result=mysqli_query($connection , $query);
-							if(!$result)
-								echo mysqli_error($connection);
-							$i=$i+1;		
-						}
+	if(isset($_SESSION['username']))
+		{ 
+			if(isset($_GET['form_id']))
+			{	$count_q=0;
+				if(isset($_SESSION['username']))
+				{	$form_id=$_GET['form_id'];
+					$arr=explode('_' , $form_id);
+					$admin=$arr[0];
+					$uname=$_SESSION['username'];
+					$qtable=$form_id."_Q";
+					$atable=$form_id."_A";
+					$query0="select * from $uname where form_id=\"$form_id\"";
+					$res0=mysqli_query($connection , $query0);
+					$count0=mysqli_num_rows($res0);
+					if(!$res0)
+						echo mysqli_error($connection);
+					if($count0!=0)
+						echo "Not authorized";
+					else
+					{	 
+						
+						$submit=0; 
+						if(isset($_POST['submit']))
+						{
+								$submit=1;
+								$i=1;
+								 $query2="insert into $atable (user) values ('$uname')";
+								$res2=mysqli_query($connection, $query2);
+								if(!$res2)
+									echo mysqli_error($connection);
+								$query11="select * from $qtable";
+								$result11=mysqli_query($connection , $query11);
+								$count_q=mysqli_num_rows($result11);
+								while($i<=$count_q)
+								{	 $q="Q_".$i;
+									$ans=$_POST[$q];
+									$query="update $atable set $q ='$ans' where user=\"$uname\"";
+									$result=mysqli_query($connection , $query);
+									if(!$result)
+										echo mysqli_error($connection);
+									$i=$i+1;		
+								}
 
-				}
+						}
+					}
+				}	
 			}
-		}	
+			else
+				header('Location:index.php');
 	}
+	else
+		header('Location:login.php');
+
 ?>
 
 

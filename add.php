@@ -1,51 +1,60 @@
 <?php
 	require_once("connect.php");
 	session_start();
-	if(isset($_GET['form_id']))
-	{	$set=0;
-		$uname=$_SESSION['username'];
-		$form_id=$_GET['form_id'];
-		$qtable=$form_id."_Q";
-		$atable=$form_id."_A";
-		if(isset($_POST['add']))
-		{		
-			$question=mysqli_real_escape_string($connection , $_POST['question']);
-			$type=$_POST['type'];
-			
-			
-			$query0="select * from $qtable";
-			$res0=mysqli_query($connection , $query0);
-			$count = mysqli_num_rows($res0);
-			
-			
-			
-					
-			$count=$count+1;
-			$qid="Q_".$count;
-	
-			if($count>0)
-				$gen=1;
-
-			$query1="insert into $qtable ( qid, question ,type ) values( '$qid' , '$question' , '$type' )";		
-			$res1=mysqli_query($connection , $query1);
-	
-			$query2="alter table $atable add $qid varchar(2000)";
-			$res2=mysqli_query($connection , $query2);
-			
-
-	
-			if(!$res0 || !$res1 || !$res2)
-				echo mysqli_error($connection); 
-		}
-		
-		if(isset($_POST['submit']))
-		{
-			$set=1;$gen=0;
-		}	
-
-			
+	if(isset($_SESSION['username']))
+	{
+		if(isset($_GET['form_id']))
+		{	$set=0;
+			$uname=$_SESSION['username'];
+			$form_id=$_GET['form_id'];
+			$qtable=$form_id."_Q";
+			$atable=$form_id."_A";
+			if(isset($_POST['add']))
+			{		
+				$question=mysqli_real_escape_string($connection , $_POST['question']);
+				$type=$_POST['type'];
 				
-	}		
+				
+				$query0="select * from $qtable";
+				$res0=mysqli_query($connection , $query0);
+				$count = mysqli_num_rows($res0);
+				
+				
+				
+						
+				$count=$count+1;
+				$qid="Q_".$count;
+		
+				if($count>0)
+					$gen=1;
+
+				$query1="insert into $qtable ( qid, question ,type ) values( '$qid' , '$question' , '$type' )";		
+				$res1=mysqli_query($connection , $query1);
+		
+				$query2="alter table $atable add $qid varchar(2000)";
+				$res2=mysqli_query($connection , $query2);
+				
+
+		
+				if(!$res0 || !$res1 || !$res2)
+					echo mysqli_error($connection); 
+			}
+			
+			if(isset($_POST['submit']))
+			{
+				$set=1;$gen=0;
+			}	
+
+				
+					
+		}
+		else
+			header('Location:index.php');
+
+	}
+	else
+		header('Location:login.php');
+			
 
 ?>
 
